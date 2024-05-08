@@ -3,6 +3,7 @@ package com.ducku.conferenceapp.activities;
 import android.content.Intent;
 import android.graphics.pdf.PdfRenderer;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -91,8 +92,8 @@ public class SignUpActivity extends AppCompatActivity {
     private void signUp() {
         buttonSignUp.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
-
         FirebaseFirestore database = FirebaseFirestore.getInstance();
+
         HashMap<String, Object> user = new HashMap<>();
         user.put(Constants.KEY_FIRST_NAME, inputFirstName.getText().toString());
         user.put(Constants.KEY_LAST_NAME, inputLastName.getText().toString());
@@ -102,7 +103,8 @@ public class SignUpActivity extends AppCompatActivity {
         database.collection(Constants.KEY_COLLECTION_USERS).add(user).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
 
-
+                preferenceManager.putString(Constants.KEY_USER_ID, task.getResult().getId());
+                Log.d("SignUpId", task.getResult().getId());
                 preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true);
                 preferenceManager.putString(Constants.KEY_FIRST_NAME, inputFirstName.getText().toString());
                 preferenceManager.putString(Constants.KEY_LAST_NAME, inputLastName.getText().toString());

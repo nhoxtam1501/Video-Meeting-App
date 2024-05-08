@@ -11,4 +11,5 @@
     <color name="colorTextIcons">#FFFFFF</color>
     <color name="colorBackground">#FAFAFA</color>
     <color name="colorHintText">#BDBDBD</color>
+    <color name="holo_red_light">#FF474D</color>
 </resources>

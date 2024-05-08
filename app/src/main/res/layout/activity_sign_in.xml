@@ -161,6 +161,18 @@
             app:layout_constraintTop_toBottomOf="@id/cardSignIn">
         </com.google.android.material.button.MaterialButton>
 
+        <ProgressBar
+            android:id="@+id/signInProgressBar"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/buttonSignIn"
+            app:layout_constraintEnd_toEndOf="@id/buttonSignIn"
+            app:layout_constraintStart_toStartOf="@id/buttonSignIn"
+            app:layout_constraintTop_toTopOf="@id/buttonSignIn">
+
+        </ProgressBar>
+
 
         <TextView
             android:id="@+id/textNoAccount"
