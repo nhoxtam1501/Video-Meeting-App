@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "790489062147",
+    "project_id": "conference-app-a239c",
+    "storage_bucket": "conference-app-a239c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:790489062147:android:04db2e9ce9c7dfbc386736",
+        "android_client_info": {
+          "package_name": "com.ducku.conferenceapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZo1pm6yEq1P1zzkjOdrKjpwe4yXtU_yw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:790489062147:android:6abe2990f02aa658386736",
+        "android_client_info": {
+          "package_name": "om.ducku.conferenceapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZo1pm6yEq1P1zzkjOdrKjpwe4yXtU_yw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
