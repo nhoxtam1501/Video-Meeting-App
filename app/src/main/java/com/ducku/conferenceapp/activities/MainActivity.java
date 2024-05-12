@@ -15,10 +15,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.ducku.conferenceapp.R;
 import com.ducku.conferenceapp.adapters.UserAdapter;
 import com.ducku.conferenceapp.databinding.ActivityMainBinding;
+import com.ducku.conferenceapp.listeners.UserListener;
 import com.ducku.conferenceapp.models.User;
 import com.ducku.conferenceapp.utils.Constants;
 import com.ducku.conferenceapp.utils.PreferenceManager;
@@ -35,7 +37,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements UserListener {
     private ActivityMainBinding activityMainBinding;
     private PreferenceManager preferenceManager;
 
@@ -44,7 +46,9 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView userRecyclerView;
     private TextView textErrorMessage;
-    private ProgressBar userProgressBar;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +58,10 @@ public class MainActivity extends AppCompatActivity {
         TextView textTitle = activityMainBinding.textTitle;
         userRecyclerView = activityMainBinding.userRecyclerView;
         textErrorMessage = activityMainBinding.textErrorMessage;
-        userProgressBar = activityMainBinding.userProgressBar;
+        swipeRefreshLayout = activityMainBinding.swipeRefreshLayout;
 
         users = new ArrayList<>();
-        userAdapter = new UserAdapter(users);
+        userAdapter = new UserAdapter(users, this);
         userRecyclerView.setAdapter(userAdapter);
         preferenceManager = new PreferenceManager(getApplicationContext());
 
@@ -74,18 +78,19 @@ public class MainActivity extends AppCompatActivity {
         activityMainBinding.textSignOut.setOnClickListener(v -> {
             signOut();
         });
-
+        swipeRefreshLayout.setOnRefreshListener(this::getUsers);
         getUsers();
     }
 
     private void getUsers() {
-        userProgressBar.setVisibility(View.VISIBLE);
+        swipeRefreshLayout.setRefreshing(true);
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         database.collection(Constants.KEY_COLLECTION_USERS)
                 .get()
                 .addOnCompleteListener(task -> {
+                    swipeRefreshLayout.setRefreshing(false);
                     if (task.isSuccessful() && task.getResult() != null) {
-                        userProgressBar.setVisibility(View.GONE);
+                        users.clear();
                         String currentUserId = preferenceManager.getString(Constants.KEY_USER_ID);
 
                         for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
@@ -141,5 +146,29 @@ public class MainActivity extends AppCompatActivity {
             } else
                 Toast.makeText(this, "Unable to sign out", Toast.LENGTH_SHORT).show();
         });
+    }
+
+    @Override
+    public void initVideoMeeting(User user) {
+        if (user.getToken() == null || user.getToken().trim().isEmpty()) {
+            Toast.makeText(this, user.getFirstName() + " " + user.getLastName() + " is not available for video meeting", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent = new Intent(getApplicationContext(), OutGoingInvitationActivity.class);
+            intent.putExtra("user", user);
+            intent.putExtra("type", "video");
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void initAudioMeeting(User user) {
+        if (user.getToken() == null || user.getToken().trim().isEmpty()) {
+            Toast.makeText(this, user.getFirstName() + " " + user.getLastName() + " is not available for audio meeting", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent = new Intent(getApplicationContext(), OutGoingInvitationActivity.class);
+            intent.putExtra("user", user);
+            intent.putExtra("type", "audio");
+            startActivity(intent);
+        }
     }
 }

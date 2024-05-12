@@ -10,15 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ducku.conferenceapp.R;
+import com.ducku.conferenceapp.listeners.UserListener;
 import com.ducku.conferenceapp.models.User;
 
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
     List<User> users;
+    UserListener userListener;
 
-    public UserAdapter(List<User> users) {
+    public UserAdapter(List<User> users, UserListener userListener) {
         this.users = users;
+        this.userListener = userListener;
     }
 
     @NonNull
@@ -41,7 +44,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         return users != null ? users.size() : -1;
     }
 
-    static class UserViewHolder extends RecyclerView.ViewHolder {
+    class UserViewHolder extends RecyclerView.ViewHolder {
         TextView textFirstChar, textUsername, textEmail;
         ImageView imageAudioMeeting, imageVideoMeeting;
 
@@ -58,6 +61,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             textFirstChar.setText(user.getFirstName().substring(0, 1));
             textUsername.setText(String.format("%s %s", user.getFirstName(), user.getLastName()));
             textEmail.setText(user.getEmail());
+            imageVideoMeeting.setOnClickListener(v -> {
+                userListener.initVideoMeeting(user);
+            });
+
+            imageAudioMeeting.setOnClickListener(v -> {
+                userListener.initAudioMeeting(user);
+            });
         }
+
+
     }
 }

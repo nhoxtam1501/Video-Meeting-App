@@ -69,6 +69,10 @@ dependencies {
     //Swipe Fresh Layout
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
+    //Firebase
     implementation platform('com.google.firebase:firebase-bom:33.0.0')
     implementation 'com.google.firebase:firebase-analytics'
+
+    //Jitsi Meet
+    implementation('org.jitsi.react:jitsi-meet-sdk:9.2.2') { transitive = true }
 }
